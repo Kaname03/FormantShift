@@ -1,3 +1,5 @@
+# plugins/VoiceModeler/CMakeLists.txt
+
 juce_add_plugin(VoiceModeler
     COMPANY_NAME "YourCompany"
     BUNDLE_ID com.yourcompany.voicemodeler
@@ -11,8 +13,8 @@ juce_add_plugin(VoiceModeler
     PLUGIN_CODE VMod
     FORMATS VST3
     PRODUCT_NAME "VoiceModeler"
-    VERSION "0.1.0"
-    VST3_CAN_REPLACE_VST2 FALSE        # VST2のヘッダ参照を抑止
+    VERSION "0.1.1"              # ★ ここを 0.1.1 に
+    VST3_CAN_REPLACE_VST2 FALSE  # VST2のヘッダ参照を抑止
 )
 
 target_sources(VoiceModeler
@@ -21,8 +23,7 @@ target_sources(VoiceModeler
       Source/PluginProcessor.h
       Source/PluginEditor.cpp
       Source/PluginEditor.h
-      Source/SimplePitchShifter.h
-      Source/SimplePitchShifter.cpp
+      # ★ SimplePitchShifter.* は削除
 )
 
 target_compile_features(VoiceModeler PRIVATE cxx_std_17)

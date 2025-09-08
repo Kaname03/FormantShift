@@ -4,7 +4,6 @@
 namespace IDs {
     // 基本
     static constexpr auto gainDb        = "gain";          // 出力ゲイン(dB)
-    static constexpr auto transposeSemi = "transposeSemi"; // 半音
     static constexpr auto formantRatio  = "formantRatio";  // 0.7–1.4
     static constexpr auto nasalAmt      = "nasalAmt";      // 0–100%
 
@@ -30,7 +29,6 @@ VoiceModelerAudioProcessor::VoiceModelerAudioProcessor()
 {
     // Raw param pointers
     pGainDb        = apvts.getRawParameterValue (IDs::gainDb);
-    pTransposeSemi = apvts.getRawParameterValue (IDs::transposeSemi);
     pFormantRatio  = apvts.getRawParameterValue (IDs::formantRatio);
     pNasalAmt      = apvts.getRawParameterValue (IDs::nasalAmt);
 
@@ -86,9 +84,6 @@ void VoiceModelerAudioProcessor::prepareToPlay (double sampleRate, int samplesPe
     // RBass
     rbassBand.reset(); rbassBand.prepare (specMono);
     rbassMono.setSize (1, samplesPerBlock);
-
-    // ピッチシフタ
-    shifter.prepare (sampleRate, samplesPerBlock, 2, 1024);
 
     // スムージング
     smoothOutGain.reset (sampleRate, 0.02);
@@ -151,13 +146,6 @@ void VoiceModelerAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer,
         juce::dsp::AudioBlock<float> b (buffer);
         juce::dsp::ProcessContextReplacing<float> c (b);
         hpf20.process (c);
-    }
-
-    // === Transpose（実処理） ===
-    {
-        const float semi = pTransposeSemi ? pTransposeSemi->load() : 0.0f;
-        shifter.setSemitone (semi);
-        shifter.process (buffer); // in-place
     }
 
     // スムージング対象
@@ -293,10 +281,7 @@ juce::AudioProcessorValueTreeState::ParameterLayout VoiceModelerAudioProcessor::
         IDs::gainDb, "Output Gain",
         juce::NormalisableRange<float> (-24.0f, 24.0f, 0.01f), 0.0f));
 
-    // 物理寄りパラメータ
-    ps.push_back (std::make_unique<juce::AudioParameterFloat>(
-        IDs::transposeSemi, "Transpose (semitones)",
-        juce::NormalisableRange<float> (-12.0f, 12.0f, 0.01f), 0.0f));
+    // 物理寄りパラメータ（Transpose は削除）
     ps.push_back (std::make_unique<juce::AudioParameterFloat>(
         IDs::formantRatio, "Formant Ratio",
         juce::NormalisableRange<float> (0.7f, 1.4f, 0.001f), 1.0f));

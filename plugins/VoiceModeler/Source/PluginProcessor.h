@@ -1,7 +1,6 @@
 #pragma once
 #include <juce_audio_processors/juce_audio_processors.h>
 #include <juce_dsp/juce_dsp.h>
-#include "SimplePitchShifter.h"
 
 class VoiceModelerAudioProcessor : public juce::AudioProcessor
 {
@@ -40,7 +39,6 @@ public:
 private:
     //=== Params (raw pointers) ===
     std::atomic<float>* pGainDb        = nullptr; // 出力ゲイン(dB)
-    std::atomic<float>* pTransposeSemi = nullptr; // 半音（±）
     std::atomic<float>* pFormantRatio  = nullptr; // 0.7–1.4
     std::atomic<float>* pNasalAmt      = nullptr; // 0–100 %
 
@@ -65,7 +63,6 @@ private:
 
     juce::dsp::Gain<float> outGain;                // 出力ゲイン
     juce::dsp::Compressor<float> limiter;          // リミッター
-    SimplePitchShifter shifter;                    // ピッチシフタ
 
     // RBass 生成用：モノ抽出＋BPF
     juce::AudioBuffer<float> rbassMono;
