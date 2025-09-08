@@ -1,0 +1,24 @@
+# Build
+/build/
+/cmake-build-*/
+
+# macOS
+.DS_Store
+
+# Visual Studio
+/.vs/
+/out/
+/*.user
+
+# Xcode
+*.xcworkspace
+*.xcuserstate
+*.xccheckout
+*.xcodeproj
+
+# CMake
+CMakeCache.txt
+CMakeFiles/
+Makefile
+cmake_install.cmake
+*.cmake
