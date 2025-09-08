@@ -12,14 +12,8 @@ juce_add_plugin(VoiceModeler
     FORMATS VST3
     PRODUCT_NAME "VoiceModeler"
     VERSION "0.1.0"
-    VST3_CAN_REPLACE_VST2 FALSE      # ★ ここ！
+    VST3_CAN_REPLACE_VST2 FALSE        # VST2のヘッダ参照を抑止
 )
-
-target_compile_definitions(VoiceModeler PRIVATE
-    JucePlugin_VST3CanReplaceVST2=0     # JUCE 内部で参照される定義
-    JUCE_VST3_CAN_REPLACE_VST2=0        # 版違い対策（新旧どちらでも抑止）
-)
-
 
 target_sources(VoiceModeler
     PRIVATE
@@ -27,6 +21,8 @@ target_sources(VoiceModeler
       Source/PluginProcessor.h
       Source/PluginEditor.cpp
       Source/PluginEditor.h
+      Source/SimplePitchShifter.h
+      Source/SimplePitchShifter.cpp
 )
 
 target_compile_features(VoiceModeler PRIVATE cxx_std_17)
@@ -38,6 +34,12 @@ target_link_libraries(VoiceModeler
       juce::juce_dsp
       juce::juce_gui_extra
       juce::juce_core
+)
+
+# 念のため二重に抑止
+target_compile_definitions(VoiceModeler PRIVATE
+    JucePlugin_VST3CanReplaceVST2=0
+    JUCE_VST3_CAN_REPLACE_VST2=0
 )
 
 if(MSVC)
