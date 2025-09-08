@@ -41,21 +41,30 @@ jobs:
         shell: bash
         run: |
           set -e
-          ART_DIR="build/VoiceModeler_artefacts/Release/VST3"
-          if [ ! -d "$ART_DIR" ]; then
-            echo "Artifacts directory not found: $ART_DIR"
-            ls -la build || true
+
+          # 再帰的に .vst3 ディレクトリを探索
+          FOUND=$(find build -type d -name "*.vst3" | sort || true)
+
+          if [ -z "$FOUND" ]; then
+            echo "No .vst3 found. Build tree:"
+            ls -R build || true
             exit 1
           fi
 
+          echo "Found VST3(s):"
+          echo "$FOUND"
+
+          # 1つ目だけをパッケージ（複数あるなら必要に応じて loop）
+          FIRST=$(echo "$FOUND" | head -n1)
+
           if [ "$RUNNER_OS" = "Windows" ]; then
-            # .vst3 はディレクトリ。zip に固める
-            7z a VoiceModeler-win-vst3.zip "$ART_DIR/VoiceModeler.vst3"
+            7z a VoiceModeler-win-vst3.zip "$FIRST"
             echo "ARTIFACT=VoiceModeler-win-vst3.zip" >> $GITHUB_ENV
           else
-            /usr/bin/ditto -c -k --sequesterRsrc --keepParent "$ART_DIR/VoiceModeler.vst3" VoiceModeler-mac-vst3.zip
+            /usr/bin/ditto -c -k --sequesterRsrc --keepParent "$FIRST" VoiceModeler-mac-vst3.zip
             echo "ARTIFACT=VoiceModeler-mac-vst3.zip" >> $GITHUB_ENV
           fi
+
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
