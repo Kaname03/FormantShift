@@ -1,4 +1,3 @@
-# Plugin target
 juce_add_plugin(VoiceModeler
     COMPANY_NAME "YourCompany"
     BUNDLE_ID com.yourcompany.voicemodeler
@@ -33,7 +32,6 @@ target_link_libraries(VoiceModeler
       juce::juce_core
 )
 
-# 環境ごとの最適化など（任意）
 if(MSVC)
   target_compile_options(VoiceModeler PRIVATE /permissive- /EHsc /Zc:preprocessor)
 else()
