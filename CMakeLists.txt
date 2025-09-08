@@ -1,12 +1,13 @@
 cmake_minimum_required(VERSION 3.20)
 
-project(FormantShift LANGUAGES CXX)
+# ★ VERSION を追加
+project(FormantShift VERSION 0.1.0 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 include(FetchContent)
-set(JUCE_TAG 8.0.0) # 必要に応じて更新
+set(JUCE_TAG 8.0.0)
 FetchContent_Declare(
   juce
   GIT_REPOSITORY https://github.com/juce-framework/JUCE.git
@@ -14,5 +15,4 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(juce)
 
-# プラグインのサブディレクトリを追加
 add_subdirectory(plugins/VoiceModeler)
