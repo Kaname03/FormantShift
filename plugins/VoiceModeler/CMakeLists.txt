@@ -11,6 +11,7 @@ juce_add_plugin(VoiceModeler
     PLUGIN_CODE VMod
     FORMATS VST3
     PRODUCT_NAME "VoiceModeler"
+    VST3_CAN_REPLACE_VST2 FALSE
 )
 
 target_sources(VoiceModeler
