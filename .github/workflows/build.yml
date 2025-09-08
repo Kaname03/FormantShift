@@ -23,10 +23,10 @@ jobs:
         uses: lukka/get-cmake@latest
 
       # macOS 用のツールチェーン（Xcode は標準で入ってます）
-      - name: Configure (macOS)
-        if: runner.os == 'macOS'
-        run: |
-          cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+      #- name: Configure (macOS)
+      #  if: runner.os == 'macOS'
+      #  run: |
+      #    cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
 
       # Windows 用のツールチェーン
       - name: Configure (Windows)
